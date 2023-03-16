@@ -1,9 +1,8 @@
-
 import os
+from base64 import b64encode
 
 import pandas as pd
 import streamlit as st
-
 
 STYLE = """
 <style>
@@ -13,14 +12,14 @@ img {
 </style>
 """
 
-UPLOAD_DIRECTORY = "uploads"
+PUBLIC_DIRECTORY = "public"
 
-if not os.path.exists(UPLOAD_DIRECTORY):
-    os.makedirs(UPLOAD_DIRECTORY)
+if not os.path.exists(PUBLIC_DIRECTORY):
+    os.makedirs(PUBLIC_DIRECTORY)
 
 
 def save_file(file):
-    file_path = os.path.join(UPLOAD_DIRECTORY, file.name)
+    file_path = os.path.join(PUBLIC_DIRECTORY, file.name)
     with open(file_path, "wb") as f:
         f.write(file.getbuffer())
     return file_path
@@ -62,25 +61,7 @@ class FileUpload(object):
             for file_path in selected_files:
                 st.write(file_path)
                 file_name = os.path.basename(file_path)
-                mime_type = "auto"
-                if file_name.endswith(".csv"):
-                    mime_type = "text/csv"
-                elif file_name.endswith(".jpg") or file_name.endswith(".jpeg"):
-                    mime_type = "image/jpeg"
-                elif file_name.endswith(".png"):
-                    mime_type = "image/png"
-                elif file_name.endswith(".mp4"):
-                    mime_type = "video/mp4"
-                elif file_name.endswith(".webm"):
-                    mime_type = "video/webm"
-                elif file_name.endswith(".ogg"):
-                    mime_type = "audio/ogg"
-                st.download_button(
-                    label="Download " + file_name,
-                    data=open(file_path, "rb").read(),
-                    file_name=file_name,
-                    mime=mime_type
-                )
+                st.markdown(get_download_link(file_path, file_name), unsafe_allow_html=True)
         if uploaded_images:
             st.success("Uploaded images:")
             col_num = 3
@@ -90,6 +71,16 @@ class FileUpload(object):
                 for i, file in enumerate(row):
                     with cols[i]:
                         st.image(file, use_column_width=True)
+
+
+def get_download_link(file_path, file_name):
+    """
+    Generate a download link for a file.
+    """
+    with open(file_path, "rb") as f:
+        data = f.read()
+    href = f'<a href="data:application/octet-stream;base64,{b64encode(data).decode()}" download="{file_name}">Download {file_name}</a>'
+    return href
 
 
 if __name__ == "__main__":
