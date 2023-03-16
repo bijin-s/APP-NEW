@@ -74,9 +74,10 @@ class FileUpload(object):
                     mime_type = "video/webm"
                 elif file_name.endswith(".ogg"):
                     mime_type = "audio/ogg"
+                file_data = open(file_path, "rb").read()
                 st.download_button(
                     label="Download " + file_name,
-                    data=open(file_path, "rb").read(),
+                    data=file_data,
                     file_name=file_name,
                     mime=mime_type
                 )
