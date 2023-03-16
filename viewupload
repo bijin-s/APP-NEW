@@ -1,0 +1,23 @@
+# Modify the save_file function to return the file name along with the file path
+def save_file(file):
+    file_name = file.name
+    file_path = os.path.join(PUBLIC_DIRECTORY, file_name)
+    with open(file_path, "wb") as f:
+        f.write(file.getbuffer())
+    return file_path, file_name
+
+# Create a list to store the uploaded file names
+uploaded_files = []
+
+# Modify the selected_files list to store the file name along with the file path
+if selected_files:
+    st.success("Saved files:")
+    for file_path, file_name in selected_files:
+        st.write(file_name)
+        uploaded_files.append(file_name)
+        st.markdown(get_download_link(file_path, file_name), unsafe_allow_html=True)
+
+# Display the list of uploaded file names
+if uploaded_files:
+    st.success("Uploaded files:")
+    st.write(uploaded_files)
