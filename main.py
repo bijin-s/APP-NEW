@@ -3,6 +3,25 @@ import os
 import pandas as pd
 import streamlit as st
 
+import pyrebase
+
+config={
+      "apiKey": "AIzaSyDxtA-8bpJRT8Go2Vj8dlHswfsAjSTSvo8",
+  "authDomain": "solar-modem-381304.firebaseapp.com",
+  "projectId": "solar-modem-381304",
+  "storageBucket": "solar-modem-381304.appspot.com",
+  "messagingSenderId": "971073651512",
+  "appId": "1:971073651512:web:8f58f2d9b1ef5385dd37cd",
+  "measurementId": "G-NKTJYNB0TY",
+  "databaseURL":""
+}
+
+firebase=pyrebase.initialize_app(config)
+
+storage=firebase.storage()
+
+path_on_cloud= "images/"
+#storage.child(path_on_cloud).put(path_local)
 
 STYLE = """
 <style>
@@ -55,7 +74,10 @@ class FileUpload(object):
                 st.warning("Unsupported file type: " + file.type)
                 continue
             file_path = save_file(file)
+          
             selected_files.append(file_path)
+           
+           
         if selected_files:
             st.success("Saved files:")
             for file_path in selected_files:
@@ -74,13 +96,18 @@ class FileUpload(object):
                     mime_type = "video/webm"
                 elif file_name.endswith(".ogg"):
                     mime_type = "audio/ogg"
+                storage.child(os.path.join(mime_type,file_name)).put(file_path)
+                st.write("File ",file_name," is uploaded to cloud")
                 file_data = open(file_path, "rb").read()
+                
+
                 st.download_button(
                     label="Download " + file_name,
                     data=file_data,
                     file_name=file_name,
                     mime=mime_type
                 )
+        
         if uploaded_images:
             st.success("Uploaded images:")
             col_num = 3
