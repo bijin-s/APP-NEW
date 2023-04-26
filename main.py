@@ -6,13 +6,13 @@ import streamlit as st
 import pyrebase
 
 config={
-      "apiKey": "AIzaSyDxtA-8bpJRT8Go2Vj8dlHswfsAjSTSvo8",
-  "authDomain": "solar-modem-381304.firebaseapp.com",
-  "projectId": "solar-modem-381304",
-  "storageBucket": "solar-modem-381304.appspot.com",
-  "messagingSenderId": "971073651512",
-  "appId": "1:971073651512:web:8f58f2d9b1ef5385dd37cd",
-  "measurementId": "G-NKTJYNB0TY",
+       "apiKey": "AIzaSyC3sqVr2zQv3tb1HCfgonifGjBdH_saUzQ",
+  "authDomain": "ms-testapp-1.firebaseapp.com",
+  "projectId": "ms-testapp-1",
+  "storageBucket": "ms-testapp-1.appspot.com",
+  "messagingSenderId": "376829227608",
+  "appId": "1:376829227608:web:5f5cab82df053a41f4902d",
+  "measurementId": "G-VMN5VMP008",
   "databaseURL":""
 }
 
@@ -96,7 +96,7 @@ class FileUpload(object):
                     mime_type = "video/webm"
                 elif file_name.endswith(".ogg"):
                     mime_type = "audio/ogg"
-                storage.child(os.path.join(mime_type,file_name)).put(file_path)
+                storage.child(os.path.join(mime_type,file_name)).put(file_path)#uploading files
                 st.write("File ",file_name," is uploaded to cloud")
                 file_data = open(file_path, "rb").read()
                 
